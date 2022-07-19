@@ -21,7 +21,7 @@
 <div class="d-flex flex-column px-3 h-75">
     <textarea placeholder="¿Que sucedio hoy?"></textarea>
 </div>
-<FabVue/>
+<FabVue icon="fa-save"/>
 <img src="https://st1.uvnimg.com/dims4/default/0fefa39/2147483647/thumbnail/1024x576%3E/quality/75/?url=https%3A%2F%2Fuvn-brightspot.s3.amazonaws.com%2Fassets%2Fvixes%2Fimj%2Fa%2Famazonas-afluentes.jpg" class="img-thumbnail" alt="amazonas">
 </template>
 

@@ -3,7 +3,7 @@
     <h1 class="align-self-center">No hay nada seleccionado</h1>
      
   </div>
- <fab-vue/>
+ <fabVue icon=" fa fa-2x fa-plus"/>
 </template>
 
 <script>
