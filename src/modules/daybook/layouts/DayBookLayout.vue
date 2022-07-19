@@ -19,6 +19,7 @@ export default {
     components: {
         NavBarDay: defineAsyncComponent(()=> import('../components/NavBarDay.vue')),
         EntryList: defineAsyncComponent(()=> import('../components/EntryList.vue')),
+       
     }
 }
 
