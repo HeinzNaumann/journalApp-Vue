@@ -23,7 +23,7 @@
       <textarea placeholder="¿Que sucedio hoy?" v-model="entry.text">
       </textarea>
     </div>
-    <FabVue icon="fa-save" />
+    <FabVue icon="fa-save" @on:click="saveEntry" />
     <img
       src="https://st1.uvnimg.com/dims4/default/0fefa39/2147483647/thumbnail/1024x576%3E/quality/75/?url=https%3A%2F%2Fuvn-brightspot.s3.amazonaws.com%2Fassets%2Fvixes%2Fimj%2Fa%2Famazonas-afluentes.jpg"
       class="img-thumbnail"
@@ -36,7 +36,7 @@
 <script>
 import { defineAsyncComponent } from "vue";
 
-import { mapGetters } from "vuex"; // computed
+import { mapActions, mapGetters } from "vuex"; // computed
 
 import getDayMonthYear from "../helpers/getDayMonthYear";
 export default {
@@ -66,10 +66,19 @@ export default {
   },
 
   methods: {
+
     loadEntry() {
       const entry = this.getEntryById(this.id);
       if (!entry) this.$router.push({ name: "no-entry" });
       this.entry = entry;
+    },
+
+    ...mapActions('journal', ['updateEntry']),
+
+    saveEntry() {
+      // disparar la action del Journal Module
+     this.updateEntry(this.entry)
+     
     },
   },
 
