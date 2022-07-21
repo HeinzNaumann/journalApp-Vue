@@ -14,6 +14,16 @@ export const updateEntry = ( state, entry ) => { // entry actualizado
 }
 
 
-export const addEntry = ( /*state*/) => {
+export const addEntry = ( state, entry) => {
+    console.log(state.entries)
+    state.entries = [entry, ...state.entries]
+   
+}
+
+
+export const deleteEntry = (state, id) =>{
+
+    //remover el que coincida con este id
+    state.entries = state.entries.filter(prueba => prueba.id !== id)
 
 }
