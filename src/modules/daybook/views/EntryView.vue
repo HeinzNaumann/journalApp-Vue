@@ -8,6 +8,14 @@
       </div>
 
       <div>
+
+        <input type="file"
+              @change="onSelectedImage"
+              ref="imageSelector"
+              v-show="false"
+              accept="image/png, image/jpeg"
+        />
+
         <button
           v-if="entry.id"
           class="btn btn-danger mx-2"
@@ -16,7 +24,7 @@
           Borrar,
           <li class="fa fa-trash-alt"></li>
         </button>
-        <button class="btn btn-primary mx-2">
+        <button class="btn btn-primary mx-2" @click="onSelectImage">
           Subir foto
           <li class="fa fa-upload"></li>
         </button>
@@ -28,8 +36,14 @@
       </textarea>
     </div>
     <FabVue icon="fa-save" @on:click="saveEntry" />
-    <img
+    <!-- <img
       src="https://st1.uvnimg.com/dims4/default/0fefa39/2147483647/thumbnail/1024x576%3E/quality/75/?url=https%3A%2F%2Fuvn-brightspot.s3.amazonaws.com%2Fassets%2Fvixes%2Fimj%2Fa%2Famazonas-afluentes.jpg"
+      class="img-thumbnail"
+      alt="amazonas"
+    /> -->
+    <img
+      v-if="localImage"
+      :src="localImage"
       class="img-thumbnail"
       alt="amazonas"
     />
@@ -55,6 +69,8 @@ export default {
   data() {
     return {
       entry: null,
+      localImage: null,
+      file: null
     };
   },
 
@@ -127,6 +143,26 @@ export default {
       }
      
     },
+
+    onSelectedImage(event){
+      const file = event.target.files[0]
+      if (!file){
+        this.localImage = null
+        this.file = null
+        return
+      }
+
+      this.file = file
+      
+      const fr = new FileReader()
+      fr.onload = () => this.localImage = fr.result
+      fr.readAsDataURL( file )
+
+    },
+
+      onSelectImage (){
+      this.$refs.imageSelector.click()
+    }
   },
 
   created() {
