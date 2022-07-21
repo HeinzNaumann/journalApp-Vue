@@ -3,7 +3,9 @@
     <h1 class="align-self-center">No hay nada seleccionado</h1>
      
   </div>
- <fabVue icon=" fa fa-2x fa-plus"/>
+ <fabVue 
+      @on:click="createNewEntry"
+      icon=" fa fa-2x fa-plus"/>
 </template>
 
 <script>
@@ -12,6 +14,11 @@
 export default {
   components: {
      FabVue: defineAsyncComponent(()=> import('../components/FabVue.vue'))
+  },
+  methods: {
+      createNewEntry() {
+        this.$router.push({name: 'entry', params: {id: 'new'}})
+      }
   }
 }
 </script>

@@ -26,15 +26,32 @@ export const updateEntry = async ({ commit }, entry) => { //entry debe de ser un
         picture
     }
     const texto = JSON.stringify(nuevosDatos)
-    // Extraer solo lo que necesitan // -id
 
     await journalApi.put(`entries/${id}.json`, texto)
 
-    // Comit de una mutación -> updateEntry
     commit('updateEntry', {...entry})
 }
 
-export const createEntry = async (/*{commit}*/) => {
+export const createEntry = async ({commit}, entry) => {
+
+    const { text, date, picture} = entry
+
+    const nuevosDatos = { text, date, picture}
+
+    const {data} = await journalApi.post ( 'entries.json', nuevosDatos)
+
+    entry.id = data.name
+
+    commit('addEntry', {...entry})
+
+    return data.name
+}
 
 
+
+export const deleteEntry = async ({commit}, id) => {
+
+    await journalApi.delete(`entries/${id}.json`)
+
+    commit('deleteEntry', id)
 }

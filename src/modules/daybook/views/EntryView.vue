@@ -8,7 +8,11 @@
       </div>
 
       <div>
-        <button class="btn btn-danger mx-2">
+        <button 
+                v-if="entry.id"
+                class="btn btn-danger mx-2"
+                @click="onDeleteEntry"
+        >
           Borrar,
           <li class="fa fa-trash-alt"></li>
         </button>
@@ -31,7 +35,6 @@
     />
   </template>
 </template>
-
 
 <script>
 import { defineAsyncComponent } from "vue";
@@ -66,20 +69,40 @@ export default {
   },
 
   methods: {
-
     loadEntry() {
-      const entry = this.getEntryById(this.id);
-      if (!entry) this.$router.push({ name: "no-entry" });
+      let entry;
+
+      if (this.id === "new") {
+        entry = {
+          text: "",
+          date: new Date().getTime(),
+        };
+      } else {
+        entry = this.getEntryById(this.id);
+        if (!entry) this.$router.push({ name: "no-entry" });
+      }
+
       this.entry = entry;
     },
 
-    ...mapActions('journal', ['updateEntry']),
+    ...mapActions("journal", ["updateEntry", "createEntry", "deleteEntry"]),
 
-    saveEntry() {
-      // disparar la action del Journal Module
-     this.updateEntry(this.entry)
-     
+    async saveEntry() {
+
+      if ( this.entry.id ) {
+        await this.updateEntry(this.entry);
+      } else {
+        const id = await this.createEntry(this.entry)
+        console.log(id)
+        this.$router.push({name: 'entry', params: {id}})
+      }
+
     },
+    async onDeleteEntry(){
+      await this.deleteEntry(this.id)
+      //redireccionar fuera de aqui
+      this.$router.push({name: 'no-entry'})
+    }
   },
 
   created() {
