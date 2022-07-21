@@ -8,10 +8,10 @@
       </div>
 
       <div>
-        <button 
-                v-if="entry.id"
-                class="btn btn-danger mx-2"
-                @click="onDeleteEntry"
+        <button
+          v-if="entry.id"
+          class="btn btn-danger mx-2"
+          @click="onDeleteEntry"
         >
           Borrar,
           <li class="fa fa-trash-alt"></li>
@@ -38,10 +38,9 @@
 
 <script>
 import { defineAsyncComponent } from "vue";
-
-import { mapActions, mapGetters } from "vuex"; // computed
-
+import { mapActions, mapGetters } from "vuex";
 import getDayMonthYear from "../helpers/getDayMonthYear";
+import Swal from "sweetalert2";
 export default {
   props: {
     id: {
@@ -88,21 +87,46 @@ export default {
     ...mapActions("journal", ["updateEntry", "createEntry", "deleteEntry"]),
 
     async saveEntry() {
-
-      if ( this.entry.id ) {
+      new Swal({
+        title: "Espere por favor",
+        allowOutsideClick: false,
+      });
+      Swal.showLoading();
+      if (this.entry.id) {
         await this.updateEntry(this.entry);
       } else {
-        const id = await this.createEntry(this.entry)
-        console.log(id)
-        this.$router.push({name: 'entry', params: {id}})
+        const id = await this.createEntry(this.entry);
+
+        this.$router.push({ name: "entry", params: { id } });
       }
 
+      Swal.fire({
+        title: "Guardado",
+        text: "Nota guardada con exito",
+        icon: "success",
+        confirmButtonText: "Cool",
+      });
     },
-    async onDeleteEntry(){
-      await this.deleteEntry(this.id)
-      //redireccionar fuera de aqui
-      this.$router.push({name: 'no-entry'})
-    }
+    async onDeleteEntry() {
+      const { isConfirmed } = await Swal.fire({
+        title: "¿Esta seguro?",
+        text: "Una vez borrado, no se puede recuperar",
+        showDenyButton: true,
+        confirmButtonText: "Si, estoy seguro",
+      });
+      if (isConfirmed) {
+        new Swal({
+          title: 'Espere por favor',
+          allowOutsideClick: false
+        })
+        Swal.showLoading()
+        await this.deleteEntry(this.id);
+        this.$router.push({ name: "no-entry" });
+
+        Swal.fire('Eliminado','','success' )
+      }
+     
+    },
   },
 
   created() {
